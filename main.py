@@ -1,4 +1,3 @@
-import numpy as np
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
@@ -18,35 +17,11 @@ import random
 # # array = [[0, 0, 0], [1, 1, 0],[0, 0, 0]]
 
 
-# # while iter < iter_number:
-# while True:
-#     iter += 1
-#     print(f"Iteration {iter}\n============")
-#     print(array)
 
-#     for x in range(1, size_x - 1):
-#         for y in range(1, size_y - 1):
-#             living_cell = bool(array[x][y])
-#             living_neighbours = 0
-#             for x1 in range(-1, 2):
-#                 for y1 in range(-1, 2):
-#                     if (x1, y1) == (0, 0): continue
-#                     living_neighbours += array[x + x1][y + y1]
-
-
-#             if living_cell:
-#                 if living_neighbours not in range(2, 4):
-#                     array[x][y] = 0
-#             else:
-#                 if living_neighbours == 3:
-#                     array[x][y] = 1
-
-#     input()
-
-
-def draw_array(array, size_x, size_y):
+def draw_array(array):
     print(array)
-
+    size_x = len(array) - 2
+    size_y = len(array[0]) - 2
     # Set up the figure and axis for drawing
     fig, ax = plt.subplots()
     ax.set_xlim([0, size_y + 2])
@@ -66,7 +41,7 @@ def draw_array(array, size_x, size_y):
 
     plt.gca().invert_yaxis()  # Invert Y axis so that (0,0) is at the top left
 
-    def next_generation():
+    def next_generation(array):
         array_copy = array.copy()
         for x in range(1, size_x + 1):
             for y in range(1, size_y + 1):
@@ -76,23 +51,13 @@ def draw_array(array, size_x, size_y):
                     for y1 in range(-1, 2):
                         if (x1, y1) == (0, 0): continue
                         living_neighbours += array_copy[x + x1][y + y1]
-                changed = False
+
                 if living_cell:
                     if living_neighbours not in range(2, 4):
                         array[x][y] = 0
-                        changed = True
-                else:
-                    if living_neighbours == 3:
+                elif living_neighbours == 3:
                         array[x][y] = 1
-                        changed = True
-                if changed == False: array[x, y] = array_copy[x, y]
-
-                # if living_cell:
-                #     if living_neighbours not in range(2, 4):
-                #         array[x][y] = 0
-                # elif living_neighbours == 3:
-                #         array[x][y] = 1
-                # else: array[x, y] = array_copy[x, y]
+                else: array[x, y] = array_copy[x, y]
 
     def update(frame):
         next_generation()
@@ -102,7 +67,7 @@ def draw_array(array, size_x, size_y):
                 rect_matrix[x, y].set_facecolor(color)
         return rect_matrix.flatten()
 
-    ani = FuncAnimation(fig, update, frames=10, interval=1000, blit=True)
+    ani = FuncAnimation(fig, update, frames=10, interval=100, blit=True)
     plt.show()
 
 
@@ -118,8 +83,8 @@ def swap_arrays(array1, array2):
     array2 = temp_array
 
 
-size_x = 5
-size_y = 5
+cols = 25
+rows = 25
 
-array = create_array(size_x, size_y)
-draw_array(array, size_x, size_y)
+array = create_array(cols, rows)
+draw_array(array)
